@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/94aabe5487.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans TC', sans-serif;
+            box-sizing: content-box;
+        }
+        .wrapper{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            padding-top: 60px;
+            
+        }
+        .card {
+            width: 350px;
+            border: cadetblue 4px solid;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+
+        .card_top {
+            display: flex;
+            padding: 3px;
+            justify-content: space-evenly;
+
+        }
+
+        .img {
+            padding: 10px;
+
+        }
+
+        .text {
+            padding: 10px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 26px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .title:hover::before {
+            content: "";
+            position: absolute;
+            top: -1.5%;
+            left: -20%;
+            width: 10%;
+            height: 90%;
+            border-style: solid;
+            border-right: none;
+            border-width: 3px;
+            border-color: coral;
+           
+        }
+
+        .title:hover::after {
+            content: "";
+            position: absolute;
+            top: -1.5%;
+            right: -20%;
+            width: 10%;
+            height: 90%;
+            border-style: solid;
+            border-left: none;
+            border-width: 3px;
+            border-color: coral;
+
+        }
+
+        .wx {
+            border-bottom: cadetblue 2px solid;
+
+        }
+
+        .card_bot {
+            display: flex;
+            justify-content: space-evenly;
+
+        }
+
+        .card_bot_wrap {
+            display: flex;
+
+            padding: 5px;
+        }
+
+        .att {
+            font-size: 14px;
+            border: cadetblue 2px solid;
+            color: #222;
+            padding: 3px 4px;
+            position: relative;
+            /* border-radius: 3px; */
+            cursor: pointer;
+        }
+        .att::before,.att::after{
+            content: "";
+            position: absolute;
+           
+            width: 50%;
+            height: 0;
+            background-color: rgb(240, 205, 181, 0.637);
+            z-index: -1;
+            opacity: 0;
+            transition:all 0.7s ;
+            transition-timing-function: ease-in-out;
+        }
+        .att::before{
+            top: 0;
+            left: 0;
+
+        }
+        .att:hover::before,.att:hover::after{
+            height: 100%;
+            opacity: 1;
+        }
+        .att::after{
+            bottom: 0;
+            right: 0;
+        }
+
+        .value {
+            font-size: 14px;
+            padding: 5px 6px;
+
+        }
+        .test{
+            background-color: cornflowerblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper"></div>
+    <!-- <div class="card"> -->
+        <!-- <div class="card_top">
+            <div class="img"><i class="fas fa-wind fa-5x" style="color: cadetblue;"></i></div>
+            <div class="text">
+                <div class="title">台中市</div>
+                <div class="wx">晴時多雲</div>
+            </div>
+        </div>
+        <div class="card_bot">
+            <div class="container">
+                <div class="card_bot_wrap">
+                    <div class="att">降雨機率</div>
+                    <div class="value">10%</div>
+
+                </div>
+                <div class="card_bot_wrap">
+                    <div class="att">舒&ensp;適&ensp;度</div>
+                    <div class="value">稍有寒意</div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="card_bot_wrap">
+                    <div class="att">最高溫度</div>
+                    <div class="value">29℃</div>
+                </div>
+                <div class="card_bot_wrap">
+                    <div class="att">最低溫度</div>
+                    <div class="value">20℃</div>
+                </div>
+            </div>
+        </div> -->
+    <!-- </div> -->
+
+        <script>
+            fetch(
+                    'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-B5282D9D-8FDD-40E9-AD48-B1DF3270465D'
+                )
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (weather) {
+
+                    var location = weather.records.location
+
+                    location.forEach((location, index) => {
+
+                        var locationName = location.locationName
+                        var wx = location.weatherElement[0].time[0].parameter.parameterName
+                        var pop = location.weatherElement[1].time[0].parameter.parameterName
+                        var minT = location.weatherElement[2].time[0].parameter.parameterName
+                        var ci = location.weatherElement[3].time[0].parameter.parameterName
+                        var maxT = location.weatherElement[4].time[0].parameter.parameterName
+                        var wx_img;
+                        if(wx == 1){
+                                wx_img = "far fa-sun"}
+                        else if(wx == 2 || 3){
+                                wx_img = "fas fa-cloud-sun"}
+                        else if(wx == 4 || 5||6||7){
+                                wx_img = "fas fa-cloud-sun"}
+                        else if(wx == 8 ){
+                            wx_img = "far fa-sun"
+                        }
+                        else if(wx == 9||10||11||12||13||14){
+                            wx_img = "fas fa-cloud-rain"
+                        }
+                        else{
+                            wx_img = "fas fa-cloud-showers-heavy"
+                        }
+
+                        console.log(locationName, wx, pop, minT, ci, maxT,index);
+                        // console.log(index);
+                        var wrapper = document.querySelector(".wrapper")
+                        wrapper.innerHTML += ` <div class="card"><div class="card_top">
+            <div class="img"><i class="${wx_img} fa-5x" style="color: cadetblue;"></i></div>
+            <div class="text">
+                <div class="title">${locationName}</div>
+                <div class="wx">${wx}</div>
+            </div>
+        </div>
+        <div class="card_bot">
+            <div class="container">
+                <div class="card_bot_wrap">
+                    <div class="att">降雨機率</div>
+                    <div class="value">${pop}</div>
+
+                </div>
+                <div class="card_bot_wrap">
+                    <div class="att">舒&ensp;適&ensp;度</div>
+                    <div class="value">${ci}</div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="card_bot_wrap">
+                    <div class="att">最高溫度</div>
+                    <div class="value">${maxT}℃</div>
+                </div>
+                <div class="card_bot_wrap">
+                    <div class="att">最低溫度</div>
+                    <div class="value">${minT}℃</div>
+                </div>
+            </div>
+        </div>
+    </div>`
+
+                    });
+
+                });
+        </script>
+</body>
+
+</html>
